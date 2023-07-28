@@ -28,7 +28,7 @@ runs:
         fi
         if [[ -n "${{ inputs.keyword-2-value }}" && -n "${{ inputs.keyword-2-weight }}" ]]
         then
-          KEYWORDS="${{ inputs.keyword-1-value }},${{ inputs.keyword-1-weight }}:"
+          KEYWORDS="${{ inputs.keyword-2-value }},${{ inputs.keyword-2-weight }}:"
         fi
         # remove trailing colon
         if [[ -n "$KEYWORDS" ]]
@@ -55,6 +55,7 @@ runs:
         echo "$REVIEWS"
         echo "review_data='$REVIEWS'" >> "$GITHUB_ENV"
       shell: bash
+    - uses: actions/checkout@v3
     - name: Process review data
       id: process-reviews
       uses: ./.github/actions/process-reviews
