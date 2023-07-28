@@ -67,7 +67,7 @@ runs:
       #shell: bash
     - name: Send request
       id: send-request
-      uses: neelix-io/test-actions@v0.8
+      uses: neelix-io/generic-action@project-initialization
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}
