@@ -24,16 +24,16 @@ runs:
         # concatenate keywords and weights into string like v1,w1:v2,w2:
         if [[ -n "${{ inputs.keyword-1-value }}" && -n "${{ inputs.keyword-1-weight }}" ]]
         then
-          KEYWORDS="${{ inputs.keyword-1-value }},${{ inputs.keyword-1-weight }}:"
+          KEYWORDS="$KEYWORDS:${{ inputs.keyword-1-value }},${{ inputs.keyword-1-weight }}"
         fi
         if [[ -n "${{ inputs.keyword-2-value }}" && -n "${{ inputs.keyword-2-weight }}" ]]
         then
-          KEYWORDS="${{ inputs.keyword-2-value }},${{ inputs.keyword-2-weight }}:"
+          KEYWORDS="$KEYWORDS:${{ inputs.keyword-2-value }},${{ inputs.keyword-2-weight }}"
         fi
-        # remove trailing colon
+        # remove leading colon
         if [[ -n "$KEYWORDS" ]]
         then
-          KEYWORDS=${KEYWORDS::-1}
+          KEYWORDS=${KEYWORDS:1}
         fi
         echo "$KEYWORDS"
         echo "keywords=$KEYWORDS" >> "$GITHUB_ENV"
@@ -56,6 +56,8 @@ runs:
         echo "review_data='$REVIEWS'" >> "$GITHUB_ENV"
       shell: bash
     - uses: actions/checkout@v3
+      with:
+        repository: neelix-io/action-handling
     - name: Process review data
       id: process-reviews
       uses: ./.github/actions/process-reviews
