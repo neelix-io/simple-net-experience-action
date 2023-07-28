@@ -58,6 +58,7 @@ runs:
     - uses: actions/checkout@v3
       with:
         repository: neelix-io/action-handling
+        ref: project-initialization
     - name: Process review data
       id: process-reviews
       uses: ./.github/actions/process-reviews
