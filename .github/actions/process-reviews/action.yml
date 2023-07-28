@@ -1,0 +1,13 @@
+name: 'Process reviews'
+description: 'Processes PR reviews and outputs data for a Neelix experience'
+inputs:
+  review-data:
+    description: 'Data from PR review'
+  keywords:
+    description: 'User-configured keywords and associated weights'
+outputs:
+  commentary:
+    description: 'Commentary for Neelix experience'
+runs:
+  using: 'node16'
+  main: 'lib/dist/process-keywords/index.js'
