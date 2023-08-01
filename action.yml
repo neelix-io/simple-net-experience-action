@@ -70,14 +70,10 @@ runs:
       with:
         review-data: ${{ env.review_data }}
         keywords: ${{ env.keywords }}
-    #- name: Generate commentary
-      #id: generate-commentary
-      #run: echo "commentary=$(sh $GITHUB_ACTION_PATH/generate_commentary.sh ${{ env.review_metric }})">> "$GITHUB_ENV"
-      #shell: bash
     - name: Send request
       id: send-request
       uses: neelix-io/generic-action@project-initialization
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}
-        commentary: ${{ steps.process-rviews.outputs.commentary }}
+        commentary: ${{ steps.process-reviews.outputs.commentary }}
