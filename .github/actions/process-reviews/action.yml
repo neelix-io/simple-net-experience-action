@@ -8,6 +8,8 @@ inputs:
 outputs:
   commentary:
     description: 'Commentary for Neelix experience'
+  weight:
+    description: 'Weight of Neelix experience'
 runs:
   using: 'node16'
   main: 'dist/index.js'

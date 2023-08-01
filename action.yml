@@ -70,8 +70,9 @@ runs:
         keywords: ${{ env.keywords }}
     - name: Send request
       id: send-request
-      uses: neelix-io/generic-action@project-initialization
+      uses: neelix-io/generic-action@build-weight
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}
         commentary: ${{ steps.process-reviews.outputs.commentary }}
+        weight: ${{ steps.process-reviews.outputs.weight }}
