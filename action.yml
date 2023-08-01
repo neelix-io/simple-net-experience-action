@@ -60,7 +60,7 @@ runs:
     - uses: actions/checkout@v3
       with:
         repository: neelix-io/action-handling
-        ref: project-initialization
+        ref: build-weight
         token: ${{ inputs.temp-pat }}  # TODO: remove before project becomes public
     - name: Process review data
       id: process-reviews
