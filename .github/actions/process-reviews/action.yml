@@ -10,4 +10,4 @@ outputs:
     description: 'Commentary for Neelix experience'
 runs:
   using: 'node16'
-  main: 'lib/dist/process-keywords/index.js'
+  main: 'dist/index.js'
