@@ -117,11 +117,15 @@ runs:
         ${{ inputs.keyword-17-value }},${{ inputs.keyword-17-weight }}:
         ${{ inputs.keyword-18-value }},${{ inputs.keyword-18-weight }}:
         ${{ inputs.keyword-19-value }},${{ inputs.keyword-19-weight }}:
-        ${{ inputs.keyword-20-value }},${{ inputs.keyword-20-weight }}
+        ${{ inputs.keyword-20-value }},${{ inputs.keyword-20-weight }}:
         EOF
         )
         echo $KEYWORDS
-        KEYWORDS=$(echo $KEYWORDS | sed 's/ ,://g')
+        KEYWORDS=$(echo $KEYWORDS | sed 's/: /:/g')
+        KEYWORDS=$(echo $KEYWORDS | sed 's/ :/:/g')
+        KEYWORDS=$(echo $KEYWORDS | sed 's/, /,/g')
+        KEYWORDS=$(echo $KEYWORDS | sed 's/ ,/,/g')
+        KEYWORDS=$(echo $KEYWORDS | sed 's/:,//g')
         if [[ -n "$KEYWORDS" && ${KEYWORDS: -1} = ":" ]]
         then
           KEYWORDS=${KEYWORDS::-1}
