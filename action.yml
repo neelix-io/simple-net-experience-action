@@ -155,7 +155,7 @@ runs:
     - uses: actions/checkout@v3
       with:
         repository: neelix-io/action-handling
-        ref: build-weight
+        ref: generate-commentary
         token: ${{ inputs.temp-pat }}  # TODO: remove before project becomes public
     - name: Process review data
       id: process-reviews
@@ -165,7 +165,7 @@ runs:
         keywords: ${{ env.keywords }}
     - name: Send request
       id: send-request
-      uses: neelix-io/generic-action@generate-commentary
+      uses: neelix-io/generic-action@build-weight
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}
