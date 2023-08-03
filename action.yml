@@ -121,12 +121,12 @@ runs:
         EOF
         )
         echo $KEYWORDS
-        while [[ -n $KEYWORDS && ${KEYWORDS: -1} = ":"]]
-        do
-          KEYWORDS=${KEYWORDS:1}
-        done
+        KEYWORDS=$(echo $KEYWORDS | sed 's/ ,://g')
+        if [[ -n "$KEYWORDS" && ${KEYWORDS: -1} = ":" ]]
+        then
+          KEYWORDS=${KEYWORDS::-1}
+        fi
         echo $KEYWORDS
-        KEYWORDS=$(echo $KEYWORDS | sed 's/: ,//g')
         echo $KEYWORDS
         echo "keywords=$KEYWORDS" >> "$GITHUB_ENV"
       shell: bash
