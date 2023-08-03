@@ -12,13 +12,85 @@ inputs:
     description: 'ID of consortium that created experiences will belong to'
     required: true
   keyword-1-value:
-    description: 'Keyword to use in deriving weight for Neelix experiences'
+    description: 'Keyword to use in calculating weight for Neelix experiences'
   keyword-1-weight:
     description: 'Weight to assign to each appearance of keyword-1'
   keyword-2-value:
-    description: 'Keyword to use in deriving weight for Neelix experiences'
+    description: 'Keyword to use in calculating weight for Neelix experiences'
   keyword-2-weight:
     description: 'Weight to assign to each appearance of keyword-2'
+  keyword-3-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-3-weight:
+    description: 'Weight to assign to each appearance of keyword-3'
+  keyword-4-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-4-weight:
+    description: 'Weight to assign to each appearance of keyword-4'
+  keyword-5-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-5-weight:
+    description: 'Weight to assign to each appearance of keyword-5'
+  keyword-6-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-6-weight:
+    description: 'Weight to assign to each appearance of keyword-6'
+  keyword-7-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-7-weight:
+    description: 'Weight to assign to each appearance of keyword-7'
+  keyword-8-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-8-weight:
+    description: 'Weight to assign to each appearance of keyword-8'
+  keyword-9-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-9-weight:
+    description: 'Weight to assign to each appearance of keyword-9'
+  keyword-10-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-10-weight:
+    description: 'Weight to assign to each appearance of keyword-10'
+  keyword-11-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-11-weight:
+    description: 'Weight to assign to each appearance of keyword-11'
+  keyword-12-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-12-weight:
+    description: 'Weight to assign to each appearance of keyword-12'
+  keyword-13-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-13-weight:
+    description: 'Weight to assign to each appearance of keyword-13'
+  keyword-14-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-14-weight:
+    description: 'Weight to assign to each appearance of keyword-14'
+  keyword-15-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-15-weight:
+    description: 'Weight to assign to each appearance of keyword-15'
+  keyword-16-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-16-weight:
+    description: 'Weight to assign to each appearance of keyword-16'
+  keyword-17-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-17-weight:
+    description: 'Weight to assign to each appearance of keyword-17'
+  keyword-18-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-18-weight:
+    description: 'Weight to assign to each appearance of keyword-18'
+  keyword-19-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-19-weight:
+    description: 'Weight to assign to each appearance of keyword-19'
+  keyword-20-value:
+    description: 'Keyword to use in calculating weight for Neelix experiences'
+  keyword-20-weight:
+    description: 'Weight to assign to each appearance of keyword-20'
 runs:
   using: composite
   steps:
@@ -26,14 +98,12 @@ runs:
       id: consolidate-keywords
       run: |
         # concatenate keywords and weights into string like v1,w1:v2,w2:
-        if [[ -n "${{ inputs.keyword-1-value }}" && -n "${{ inputs.keyword-1-weight }}" ]]
+        for i in {1..20}
+        do if [[ -n "${{ inputs.keyword-${i}-value }}" && -n "${{ inputs.keyword-${i}-weight }}" ]]
         then
-          KEYWORDS="$KEYWORDS:${{ inputs.keyword-1-value }},${{ inputs.keyword-1-weight }}"
+          KEYWORDS="$KEYWORDS:${{ inputs.keyword-${i}-value }},${{ inputs.keyword-${i}-weight }}"
         fi
-        if [[ -n "${{ inputs.keyword-2-value }}" && -n "${{ inputs.keyword-2-weight }}" ]]
-        then
-          KEYWORDS="$KEYWORDS:${{ inputs.keyword-2-value }},${{ inputs.keyword-2-weight }}"
-        fi
+        done
         # remove leading colon
         if [[ -n "$KEYWORDS" ]]
         then
