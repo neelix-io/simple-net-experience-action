@@ -2734,10 +2734,24 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const run = () => {
+    var _a, _b;
     const reviewData = core.getInput('review-data');
-    console.log('review data:', reviewData);
-    const keywords = core.getInput('keywords');
+    console.log('raw review data:', reviewData);
+    const parsedReviews = JSON.parse(reviewData);
+    console.log('parsed review data:', parsedReviews);
+    const keywords = core.getInput('keywords')
+        .split(':')
+        .map(w => w.split(','))
+        .map(([v, wString]) => [v, +wString]);
     console.log('keywords:', keywords);
+    let weight = 0;
+    for (const review of parsedReviews) {
+        for (const [v, w] of keywords) {
+            const re = new RegExp(v, 'g');
+            weight += (((_b = (_a = review.body) === null || _a === void 0 ? void 0 : _a.match(re)) === null || _b === void 0 ? void 0 : _b.length) || 0) * w;
+        }
+    }
+    core.setOutput('weight', weight);
     core.setOutput('commentary', 'Commentary output from "process-reviews" action');
 };
 run();
