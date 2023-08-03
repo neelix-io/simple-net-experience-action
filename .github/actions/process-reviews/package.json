@@ -1,7 +1,7 @@
 {
-  "name": "action-handling",
+  "name": "process-reviews",
   "version": "1.0.0",
-  "description": "A GitHub action for generating Neelix experiences from merged PR reviews.",
+  "description": "Action for calculating weight and generating commentary for Neelix experiences from merged PR reviews.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "ncc build src/index.ts -o dist --license licenses.txt"

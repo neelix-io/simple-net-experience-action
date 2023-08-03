@@ -1,5 +1,7 @@
-name: 'Action handling'
-description: 'Action for generating Neelix experiences from merged PR reviews.'
+name: 'Simple Net Experience'
+description: >
+  'Action for generating Neelix experiences from merged PR reviews with net '
+  'weight of keyword occurrences.'
 inputs:
   # TODO: remove before project becomes public
   temp-pat:
@@ -126,11 +128,11 @@ runs:
         KEYWORDS=$(echo $KEYWORDS | sed 's/, /,/g')
         KEYWORDS=$(echo $KEYWORDS | sed 's/ ,/,/g')
         KEYWORDS=$(echo $KEYWORDS | sed 's/:,//g')
+        echo $KEYWORDS
         if [[ -n "$KEYWORDS" && ${KEYWORDS: -1} = ":" ]]
         then
           KEYWORDS=${KEYWORDS::-1}
         fi
-        echo $KEYWORDS
         echo $KEYWORDS
         echo "keywords=$KEYWORDS" >> "$GITHUB_ENV"
       shell: bash
