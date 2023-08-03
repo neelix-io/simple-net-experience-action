@@ -96,20 +96,34 @@ runs:
   steps:
     - name: Consolidate keywords
       id: consolidate-keywords
-      run: |
-        # concatenate keywords and weights into string like v1,w1:v2,w2:
-        for i in {1..20}
-        do if [[ -n "${{ inputs.keyword-${i}-value }}" && -n "${{ inputs.keyword-${i}-weight }}" ]]
-        then
-          KEYWORDS="$KEYWORDS:${{ inputs.keyword-${i}-value }},${{ inputs.keyword-${i}-weight }}"
-        fi
-        done
-        # remove leading colon
-        if [[ -n "$KEYWORDS" ]]
-        then
-          KEYWORDS=${KEYWORDS:1}
-        fi
-        echo "$KEYWORDS"
+      run: >
+        KEYWORDS="${{ inputs.keyword-1-value }},${{ inputs.keyword-1-weight }}:
+        ${{ inputs.keyword-2-value }},${{ inputs.keyword-2-weight }}:
+        ${{ inputs.keyword-3-value }},${{ inputs.keyword-3-weight }}:
+        ${{ inputs.keyword-4-value }},${{ inputs.keyword-4-weight }}:
+        ${{ inputs.keyword-5-value }},${{ inputs.keyword-5-weight }}:
+        ${{ inputs.keyword-6-value }},${{ inputs.keyword-6-weight }}:
+        ${{ inputs.keyword-7-value }},${{ inputs.keyword-7-weight }}:
+        ${{ inputs.keyword-8-value }},${{ inputs.keyword-8-weight }}:
+        ${{ inputs.keyword-9-value }},${{ inputs.keyword-9-weight }}:
+        ${{ inputs.keyword-10-value }},${{ inputs.keyword-10-weight }}:
+        ${{ inputs.keyword-11-value }},${{ inputs.keyword-11-weight }}:
+        ${{ inputs.keyword-12-value }},${{ inputs.keyword-12-weight }}:
+        ${{ inputs.keyword-13-value }},${{ inputs.keyword-13-weight }}:
+        ${{ inputs.keyword-14-value }},${{ inputs.keyword-14-weight }}:
+        ${{ inputs.keyword-15-value }},${{ inputs.keyword-15-weight }}:
+        ${{ inputs.keyword-16-value }},${{ inputs.keyword-16-weight }}:
+        ${{ inputs.keyword-17-value }},${{ inputs.keyword-17-weight }}:
+        ${{ inputs.keyword-18-value }},${{ inputs.keyword-18-weight }}:
+        ${{ inputs.keyword-19-value }},${{ inputs.keyword-19-weight }}:
+        ${{ inputs.keyword-20-value }},${{ inputs.keyword-20-weight }}";
+        echo "$KEYWORDS";
+        while [[ -n "$KEYWORDS" && "${KEYWORDS: -1}" = ":"]]; do
+          KEYWORDS=${KEYWORDS:1};
+        done;
+        echo "$KEYWORDS";
+        KEYWORDS=$(echo $KEYWORDS | sed -E 's/:{2,}/:/g');
+        echo "$KEYWORDS";
         echo "keywords=$KEYWORDS" >> "$GITHUB_ENV"
       shell: bash
     - name: Get PR review data
