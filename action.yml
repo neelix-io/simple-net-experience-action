@@ -165,7 +165,7 @@ runs:
         keywords: ${{ env.keywords }}
     - name: Send request
       id: send-request
-      uses: neelix-io/generic-action@build-weight
+      uses: neelix-io/generic-action@generate-commentary
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}
