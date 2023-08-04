@@ -158,8 +158,10 @@ runs:
       run: |
         REPO=${{ github.repository }}
         echo "repo: $REPO"
+        echo "repo=$REPO" >> "$GITHUB_ENV"
         PR_NUMBER=${{ github.event.number }}
         echo "pr number: $PR_NUMBER"
+        echo "pr_number=$PR_NUMBER" >> "$GITHUB_ENV"
         # TODO: make random EOF
         echo "review_data<<EOF" >> "$GITHUB_ENV"
         curl -sL \
@@ -192,3 +194,4 @@ runs:
         activity-id: ${{ inputs.activity-id }}
         category-ids: ${{ inputs.category-ids }}
         team-ids: ${{ inputs.team-ids }}
+        external-ref: "https://github.com/${{ env.repo }}/pull/${{ env.pr_number }}"
