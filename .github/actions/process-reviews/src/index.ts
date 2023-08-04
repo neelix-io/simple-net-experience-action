@@ -26,25 +26,28 @@ const processKeywords = (keywords: [string, number][], reviews: ReviewData[]) =>
   return results;
 }
 
-const generateCommentary = (results: KeywordResults) => {
+const generateCommentary = (results: KeywordResults, summary: string) => {
   // columns: keyword, weight, count, total impact
   const cols = ['keyword', 'weight', 'count', 'total impact'];
 
   let heading = cols.reduce((acc, col) => `${acc}| ${col.padEnd(10)} `, '');
   heading += '|\n';
-  cols.forEach(() => {
-    heading += `|-${'-'.repeat(10)}-`;
+  cols.forEach((_, idx) => {
+    heading += `|-${'-'.repeat(10)}${idx > 0 ? ':' : '-'}`;
   });
   heading += '|\n';
 
-  return Object.entries(results).reduce((acc, [keyword, { weight, count }]) => {
-    let t = acc;
-    t += `| ${keyword.padEnd(10)} `
-    t += `| ${weight.toString().padEnd(10)} `
-    t += `| ${count.toString().padEnd(10)} `
-    t += `| ${(weight * count).toString().padEnd(10)} |\n`
-    return t;
-  }, heading);
+  const table = Object.entries(results)
+    .reduce((acc, [keyword, { weight, count }]) => {
+      let t = acc;
+      t += `| ${keyword.padEnd(10)} `
+      t += `| ${weight.toString().padEnd(10)} `
+      t += `| ${count.toString().padEnd(10)} `
+      t += `| ${(weight * count).toString().padEnd(10)} |\n`
+      return t;
+    }, heading);
+
+  return `${summary}\n\n---\n\n${table}`;
 }
 
 const run = () => {
@@ -67,7 +70,8 @@ const run = () => {
 
   core.setOutput('weight', aggWeight);
 
-  const commentary = generateCommentary(results);
+  const experienceSummary = core.getInput('experience-summary');
+  const commentary = generateCommentary(results, experienceSummary);
   console.log('generated commentary:', commentary);
 
   core.setOutput('commentary', commentary);

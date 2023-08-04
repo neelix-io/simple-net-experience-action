@@ -13,6 +13,9 @@ inputs:
   consortium-id:
     description: 'ID of consortium that created experiences will belong to'
     required: true
+  experience-summary:
+    description: 'Message to appear above table in experience commentary'
+    required: true
   keyword-1-value:
     description: 'Keyword to use in calculating weight for Neelix experiences'
   keyword-1-weight:
@@ -161,8 +164,9 @@ runs:
       id: process-reviews
       uses: ./.github/actions/process-reviews
       with:
-        review-data: ${{ env.review_data }}
+        experience-summary: ${{ inputs.experience-summary }}
         keywords: ${{ env.keywords }}
+        review-data: ${{ env.review_data }}
     - name: Send request
       id: send-request
       uses: neelix-io/generic-action@build-weight

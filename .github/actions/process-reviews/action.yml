@@ -1,10 +1,13 @@
 name: 'Process reviews'
 description: 'Processes PR reviews and outputs data for a Neelix experience'
 inputs:
-  review-data:
-    description: 'Data from PR review'
+  experience-summary:
+    description: 'Message to appear above table in experience commentary'
+    required: true
   keywords:
     description: 'User-configured keywords and associated weights'
+  review-data:
+    description: 'Data from PR review'
 outputs:
   commentary:
     description: 'Commentary for Neelix experience'
