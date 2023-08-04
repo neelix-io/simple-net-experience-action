@@ -2733,8 +2733,40 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
-const run = () => {
+const processKeywords = (keywords, reviews) => {
     var _a, _b;
+    const results = {};
+    for (const [keyword, weight] of keywords) {
+        let count = 0;
+        for (const review of reviews) {
+            const re = new RegExp(keyword, 'g');
+            count += (((_b = (_a = review.body) === null || _a === void 0 ? void 0 : _a.match(re)) === null || _b === void 0 ? void 0 : _b.length) || 0);
+        }
+        results[keyword] = { count, weight };
+    }
+    return results;
+};
+const generateCommentary = (results, summary) => {
+    // columns: keyword, weight, count, total impact
+    const cols = ['keyword', 'weight', 'count', 'total impact'];
+    let heading = cols.reduce((acc, col) => `${acc}| ${col.padEnd(10)} `, '');
+    heading += '|\n';
+    cols.forEach((_, idx) => {
+        heading += `|-${'-'.repeat(10)}${idx > 0 ? ':' : '-'}`;
+    });
+    heading += '|\n';
+    const table = Object.entries(results)
+        .reduce((acc, [keyword, { weight, count }]) => {
+        let t = acc;
+        t += `| ${keyword.padEnd(10)} `;
+        t += `| ${weight.toString().padEnd(10)} `;
+        t += `| ${count.toString().padEnd(10)} `;
+        t += `| ${(weight * count).toString().padEnd(10)} |\n`;
+        return t;
+    }, heading);
+    return `${summary}\n\n---\n\n${table}`;
+};
+const run = () => {
     const reviewData = core.getInput('review-data');
     console.log('raw review data:', reviewData);
     const parsedReviews = JSON.parse(reviewData);
@@ -2744,15 +2776,14 @@ const run = () => {
         .map(w => w.split(','))
         .map(([v, wString]) => [v, +wString]);
     console.log('keywords:', keywords);
-    let weight = 0;
-    for (const review of parsedReviews) {
-        for (const [v, w] of keywords) {
-            const re = new RegExp(v, 'g');
-            weight += (((_b = (_a = review.body) === null || _a === void 0 ? void 0 : _a.match(re)) === null || _b === void 0 ? void 0 : _b.length) || 0) * w;
-        }
-    }
-    core.setOutput('weight', weight);
-    core.setOutput('commentary', 'Commentary output from "process-reviews" action');
+    const results = processKeywords(keywords, parsedReviews);
+    const aggWeight = Object.values(results)
+        .reduce((acc, { count, weight }) => acc + (count * weight), 0);
+    core.setOutput('weight', aggWeight);
+    const experienceSummary = core.getInput('experience-summary');
+    const commentary = generateCommentary(results, experienceSummary);
+    console.log('generated commentary:', commentary);
+    core.setOutput('commentary', commentary);
 };
 run();
 

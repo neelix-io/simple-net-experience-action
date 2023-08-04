@@ -1,6 +1,55 @@
 import * as core from '@actions/core';
 
 
+type ReviewData = {
+  body: string;
+}
+
+type KeywordResults = {
+  [keyword: string]: {
+    count: number;
+    weight: number;
+  };
+}
+
+
+const processKeywords = (keywords: [string, number][], reviews: ReviewData[]) => {
+  const results: KeywordResults = {};
+  for (const [keyword, weight] of keywords) {
+    let count = 0;
+    for (const review of reviews) {
+      const re = new RegExp(keyword, 'g');
+      count += ((<string>review.body)?.match(re)?.length || 0);
+    }
+    results[keyword] = { count, weight }
+  }
+  return results;
+}
+
+const generateCommentary = (results: KeywordResults, summary: string) => {
+  // columns: keyword, weight, count, total impact
+  const cols = ['keyword', 'weight', 'count', 'total impact'];
+
+  let heading = cols.reduce((acc, col) => `${acc}| ${col.padEnd(10)} `, '');
+  heading += '|\n';
+  cols.forEach((_, idx) => {
+    heading += `|-${'-'.repeat(10)}${idx > 0 ? ':' : '-'}`;
+  });
+  heading += '|\n';
+
+  const table = Object.entries(results)
+    .reduce((acc, [keyword, { weight, count }]) => {
+      let t = acc;
+      t += `| ${keyword.padEnd(10)} `
+      t += `| ${weight.toString().padEnd(10)} `
+      t += `| ${count.toString().padEnd(10)} `
+      t += `| ${(weight * count).toString().padEnd(10)} |\n`
+      return t;
+    }, heading);
+
+  return `${summary}\n\n---\n\n${table}`;
+}
+
 const run = () => {
   const reviewData = core.getInput('review-data');
   console.log('raw review data:', reviewData);
@@ -14,16 +63,18 @@ const run = () => {
     .map(([v, wString]) => [v, +wString] as [string, number]);
   console.log('keywords:', keywords);
 
-  let weight = 0;
-  for (const review of parsedReviews) {
-    for (const [v, w] of keywords) {
-      const re = new RegExp(v, 'g');
-      weight += ((<string>review.body)?.match(re)?.length || 0) * w;
-    }
-  }
+  const results = processKeywords(keywords, parsedReviews);
 
-  core.setOutput('weight', weight);
-  core.setOutput('commentary', 'Commentary output from "process-reviews" action');
+  const aggWeight = Object.values(results)
+    .reduce((acc, { count, weight }) => acc + (count * weight), 0);
+
+  core.setOutput('weight', aggWeight);
+
+  const experienceSummary = core.getInput('experience-summary');
+  const commentary = generateCommentary(results, experienceSummary);
+  console.log('generated commentary:', commentary);
+
+  core.setOutput('commentary', commentary);
 }
 
 run();
