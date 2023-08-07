@@ -30,6 +30,14 @@ inputs:
       'IDs of teams belonging to same consortium as experience. Use '
       'comma-separated list for multiple values (e.g. "1,2,3"). Adds specified '
       'teams to new experience. '
+  table-header-keyword:
+    description: 'Name used for "keyword" column. Default: "keyword"'
+  table-header-weight:
+    description: 'Name used for "weight" column. Default: "weight"'
+  table-header-count:
+    description: 'Name used for "count" column. Default: "count"'
+  table-header-total-impact:
+    description: 'Name used for "total impact" column. Default: "total impact"'
   keyword-1-value:
     description: 'Keyword to use in calculating weight for Neelix experiences'
   keyword-1-weight:
@@ -183,6 +191,10 @@ runs:
         experience-summary: ${{ inputs.experience-summary }}
         keywords: ${{ env.keywords }}
         review-data: ${{ env.review_data }}
+        table-header-keyword: ${{ inputs.table-header-keyword }}
+        table-header-weight: ${{ inputs.table-header-weight }}
+        table-header-count: ${{ inputs.table-header-count }}
+        table-header-total-impact: ${{ inputs.table-header-total-impact }}
     - name: Send request
       id: send-request
       uses: neelix-io/generic-action@additional-settings
