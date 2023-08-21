@@ -60,15 +60,16 @@ const generateCommentary = (
 
 const run = () => {
   const reviewData = core.getInput('review-data');
-  console.log('raw review data:', reviewData);
+  core.debug(`raw review data: ${reviewData}`);
 
   const parsedReviews = JSON.parse(reviewData);
-  console.log('parsed review data:', parsedReviews);
+  core.debug(`parsed review data: ${parsedReviews}`);
 
   const rawKeywordsInput = core.getInput('keywords');
-  console.log('raw keywords input:', rawKeywordsInput);
+  core.debug(`raw keywords input: ${rawKeywordsInput}`);
+
   const keywords = JSON.parse(rawKeywordsInput);
-  console.log('parsed keywords input:', keywords);
+  core.debug(`parsed keywords input: ${keywords}`);
 
   const results = processKeywords(keywords, parsedReviews);
 
@@ -87,7 +88,6 @@ const run = () => {
   ];
 
   const commentary = generateCommentary(results, experienceSummary, cols);
-  console.log('generated commentary:', commentary);
 
   core.setOutput('commentary', commentary);
 }

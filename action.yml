@@ -48,26 +48,21 @@ runs:
   steps:
     - name: Get PR review data
       id: get-reviews
+      env:
+        PR_NUMBER: ${{ github.event.number }}
       run: |
-        REPO=${{ github.repository }}
-        echo "repo: $REPO"
-        echo "repo=$REPO" >> "$GITHUB_ENV"
-        PR_NUMBER=${{ github.event.number }}
-        echo "pr number: $PR_NUMBER"
-        echo "pr_number=$PR_NUMBER" >> "$GITHUB_ENV"
-        # TODO: make random EOF
         echo "review_data<<EOF" >> "$GITHUB_ENV"
         curl -sL \
           -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ github.token }}" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/$REPO/pulls/$PR_NUMBER/reviews >> "$GITHUB_ENV"
+          "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews" >> "$GITHUB_ENV"
         echo "EOF" >> "$GITHUB_ENV"
       shell: bash
     - uses: actions/checkout@v3
       with:
         repository: neelix-io/action-handling
-        ref: simplified-keywords
+        ref: pre-release
         token: ${{ inputs.temp-pat }}  # TODO: remove before project becomes public
     - name: Process review data
       id: process-reviews
@@ -83,6 +78,8 @@ runs:
     - name: Send request
       id: send-request
       uses: neelix-io/create-experience-action@dev
+      env:
+        PR_NUMBER: ${{ github.event.number }}
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}
@@ -91,4 +88,4 @@ runs:
         activity-id: ${{ inputs.activity-id }}
         category-ids: ${{ inputs.category-ids }}
         team-ids: ${{ inputs.team-ids }}
-        external-ref: "https://github.com/${{ env.repo }}/pull/${{ env.pr_number }}"
+        external-ref: "https://github.com/$GITHUB_REPOSITORY/pull/$PR_NUMBER"
