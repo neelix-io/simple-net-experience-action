@@ -65,7 +65,10 @@ const run = () => {
   const parsedReviews = JSON.parse(reviewData);
   console.log('parsed review data:', parsedReviews);
 
-  const keywords = JSON.parse(core.getInput('keywords'));
+  const rawKeywordsInput = core.getInput('keywords');
+  console.log('raw keywords input:', rawKeywordsInput);
+  const keywords = JSON.parse(rawKeywordsInput);
+  console.log('parsed keywords input:', keywords);
 
   const results = processKeywords(keywords, parsedReviews);
 

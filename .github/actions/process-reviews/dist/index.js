@@ -2770,7 +2770,10 @@ const run = () => {
     console.log('raw review data:', reviewData);
     const parsedReviews = JSON.parse(reviewData);
     console.log('parsed review data:', parsedReviews);
-    const keywords = JSON.parse(core.getInput('keywords'));
+    const rawKeywordsInput = core.getInput('keywords');
+    console.log('raw keywords input:', rawKeywordsInput);
+    const keywords = JSON.parse(rawKeywordsInput);
+    console.log('parsed keywords input:', keywords);
     const results = processKeywords(keywords, parsedReviews);
     const aggWeight = Object.values(results)
         .reduce((acc, { count, weight }) => acc + (count * weight), 0);
