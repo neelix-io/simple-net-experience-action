@@ -15,9 +15,12 @@ type KeywordResults = {
 const BASE_WIDTH = 12;
 
 
-const processKeywords = (keywords: [string, number][], reviews: ReviewData[]) => {
+const processKeywords = (
+  keywords: { [keyword: string]: number },
+  reviews: ReviewData[],
+) => {
   const results: KeywordResults = {};
-  for (const [keyword, weight] of keywords) {
+  for (const [keyword, weight] of Object.entries(keywords)) {
     let count = 0;
     for (const review of reviews) {
       const re = new RegExp(keyword, 'g');
@@ -62,11 +65,7 @@ const run = () => {
   const parsedReviews = JSON.parse(reviewData);
   console.log('parsed review data:', parsedReviews);
 
-  const keywords = core.getInput('keywords')
-    .split(':')
-    .map(w => w.split(',') as [string, string])
-    .map(([v, wString]) => [v, +wString] as [string, number]);
-  console.log('keywords:', keywords);
+  const keywords = JSON.parse(core.getInput('keywords'));
 
   const results = processKeywords(keywords, parsedReviews);
 

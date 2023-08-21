@@ -16,6 +16,11 @@ inputs:
   experience-summary:
     description: 'Message to appear above table in experience commentary'
     required: true
+  keywords:
+    description: >
+      'Keywords and weights to use in calculating weight for Neelix experiences '
+      'provided as a JSON string.'
+    required: true
   activity-id:
     description: >
       'ID of an activity belonging to same consortium as experience.'
@@ -38,129 +43,9 @@ inputs:
     description: 'Name used for "count" column. Default: "count"'
   table-header-total-impact:
     description: 'Name used for "total impact" column. Default: "total impact"'
-  keyword-1-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-1-weight:
-    description: 'Weight to assign to each appearance of keyword-1'
-  keyword-2-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-2-weight:
-    description: 'Weight to assign to each appearance of keyword-2'
-  keyword-3-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-3-weight:
-    description: 'Weight to assign to each appearance of keyword-3'
-  keyword-4-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-4-weight:
-    description: 'Weight to assign to each appearance of keyword-4'
-  keyword-5-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-5-weight:
-    description: 'Weight to assign to each appearance of keyword-5'
-  keyword-6-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-6-weight:
-    description: 'Weight to assign to each appearance of keyword-6'
-  keyword-7-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-7-weight:
-    description: 'Weight to assign to each appearance of keyword-7'
-  keyword-8-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-8-weight:
-    description: 'Weight to assign to each appearance of keyword-8'
-  keyword-9-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-9-weight:
-    description: 'Weight to assign to each appearance of keyword-9'
-  keyword-10-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-10-weight:
-    description: 'Weight to assign to each appearance of keyword-10'
-  keyword-11-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-11-weight:
-    description: 'Weight to assign to each appearance of keyword-11'
-  keyword-12-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-12-weight:
-    description: 'Weight to assign to each appearance of keyword-12'
-  keyword-13-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-13-weight:
-    description: 'Weight to assign to each appearance of keyword-13'
-  keyword-14-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-14-weight:
-    description: 'Weight to assign to each appearance of keyword-14'
-  keyword-15-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-15-weight:
-    description: 'Weight to assign to each appearance of keyword-15'
-  keyword-16-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-16-weight:
-    description: 'Weight to assign to each appearance of keyword-16'
-  keyword-17-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-17-weight:
-    description: 'Weight to assign to each appearance of keyword-17'
-  keyword-18-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-18-weight:
-    description: 'Weight to assign to each appearance of keyword-18'
-  keyword-19-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-19-weight:
-    description: 'Weight to assign to each appearance of keyword-19'
-  keyword-20-value:
-    description: 'Keyword to use in calculating weight for Neelix experiences'
-  keyword-20-weight:
-    description: 'Weight to assign to each appearance of keyword-20'
 runs:
   using: composite
   steps:
-    - name: Consolidate keywords
-      id: consolidate-keywords
-      run: |
-        KEYWORDS=$(cat << EOF
-        ${{ inputs.keyword-1-value }},${{ inputs.keyword-1-weight }}:
-        ${{ inputs.keyword-2-value }},${{ inputs.keyword-2-weight }}:
-        ${{ inputs.keyword-3-value }},${{ inputs.keyword-3-weight }}:
-        ${{ inputs.keyword-4-value }},${{ inputs.keyword-4-weight }}:
-        ${{ inputs.keyword-5-value }},${{ inputs.keyword-5-weight }}:
-        ${{ inputs.keyword-6-value }},${{ inputs.keyword-6-weight }}:
-        ${{ inputs.keyword-7-value }},${{ inputs.keyword-7-weight }}:
-        ${{ inputs.keyword-8-value }},${{ inputs.keyword-8-weight }}:
-        ${{ inputs.keyword-9-value }},${{ inputs.keyword-9-weight }}:
-        ${{ inputs.keyword-10-value }},${{ inputs.keyword-10-weight }}:
-        ${{ inputs.keyword-11-value }},${{ inputs.keyword-11-weight }}:
-        ${{ inputs.keyword-12-value }},${{ inputs.keyword-12-weight }}:
-        ${{ inputs.keyword-13-value }},${{ inputs.keyword-13-weight }}:
-        ${{ inputs.keyword-14-value }},${{ inputs.keyword-14-weight }}:
-        ${{ inputs.keyword-15-value }},${{ inputs.keyword-15-weight }}:
-        ${{ inputs.keyword-16-value }},${{ inputs.keyword-16-weight }}:
-        ${{ inputs.keyword-17-value }},${{ inputs.keyword-17-weight }}:
-        ${{ inputs.keyword-18-value }},${{ inputs.keyword-18-weight }}:
-        ${{ inputs.keyword-19-value }},${{ inputs.keyword-19-weight }}:
-        ${{ inputs.keyword-20-value }},${{ inputs.keyword-20-weight }}:
-        EOF
-        )
-        echo $KEYWORDS
-        KEYWORDS=$(echo $KEYWORDS | sed 's/: /:/g')
-        KEYWORDS=$(echo $KEYWORDS | sed 's/ :/:/g')
-        KEYWORDS=$(echo $KEYWORDS | sed 's/, /,/g')
-        KEYWORDS=$(echo $KEYWORDS | sed 's/ ,/,/g')
-        KEYWORDS=$(echo $KEYWORDS | sed 's/:,//g')
-        echo $KEYWORDS
-        if [[ -n "$KEYWORDS" && ${KEYWORDS: -1} = ":" ]]
-        then
-          KEYWORDS=${KEYWORDS::-1}
-        fi
-        echo $KEYWORDS
-        echo "keywords=$KEYWORDS" >> "$GITHUB_ENV"
-      shell: bash
     - name: Get PR review data
       id: get-reviews
       run: |
@@ -189,7 +74,7 @@ runs:
       uses: ./.github/actions/process-reviews
       with:
         experience-summary: ${{ inputs.experience-summary }}
-        keywords: ${{ env.keywords }}
+        keywords: ${{ inputs.keywords }}
         review-data: ${{ env.review_data }}
         table-header-keyword: ${{ inputs.table-header-keyword }}
         table-header-weight: ${{ inputs.table-header-weight }}
@@ -197,7 +82,7 @@ runs:
         table-header-total-impact: ${{ inputs.table-header-total-impact }}
     - name: Send request
       id: send-request
-      uses: neelix-io/generic-action@additional-settings
+      uses: neelix-io/create-experience-action@dev
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}

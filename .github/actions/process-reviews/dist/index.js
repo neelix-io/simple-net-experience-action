@@ -2737,7 +2737,7 @@ const BASE_WIDTH = 12;
 const processKeywords = (keywords, reviews) => {
     var _a, _b;
     const results = {};
-    for (const [keyword, weight] of keywords) {
+    for (const [keyword, weight] of Object.entries(keywords)) {
         let count = 0;
         for (const review of reviews) {
             const re = new RegExp(keyword, 'g');
@@ -2770,11 +2770,7 @@ const run = () => {
     console.log('raw review data:', reviewData);
     const parsedReviews = JSON.parse(reviewData);
     console.log('parsed review data:', parsedReviews);
-    const keywords = core.getInput('keywords')
-        .split(':')
-        .map(w => w.split(','))
-        .map(([v, wString]) => [v, +wString]);
-    console.log('keywords:', keywords);
+    const keywords = JSON.parse(core.getInput('keywords'));
     const results = processKeywords(keywords, parsedReviews);
     const aggWeight = Object.values(results)
         .reduce((acc, { count, weight }) => acc + (count * weight), 0);
