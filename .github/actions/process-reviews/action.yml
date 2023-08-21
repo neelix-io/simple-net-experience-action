@@ -8,6 +8,14 @@ inputs:
     description: 'User-configured keywords and associated weights'
   review-data:
     description: 'Data from PR review'
+  table-header-keyword:
+    description: 'Name used for "keyword" column. Default: "keyword"'
+  table-header-weight:
+    description: 'Name used for "weight" column. Default: "weight"'
+  table-header-count:
+    description: 'Name used for "count" column. Default: "count"'
+  table-header-total-impact:
+    description: 'Name used for "total impact" column. Default: "total impact"'
 outputs:
   commentary:
     description: 'Commentary for Neelix experience'

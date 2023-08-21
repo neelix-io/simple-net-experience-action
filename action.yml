@@ -16,6 +16,28 @@ inputs:
   experience-summary:
     description: 'Message to appear above table in experience commentary'
     required: true
+  activity-id:
+    description: >
+      'ID of an activity belonging to same consortium as experience.'
+      'Sets `activity_id` field of new experience. '
+  category-ids:
+    description: >
+      'IDs of categoris belonging to same consortium as experience. Use '
+      'comma-separated list for multiple values (e.g. "1,2,3"). Adds '
+      'specified categories to new experience. '
+  team-ids:
+    description: >
+      'IDs of teams belonging to same consortium as experience. Use '
+      'comma-separated list for multiple values (e.g. "1,2,3"). Adds specified '
+      'teams to new experience. '
+  table-header-keyword:
+    description: 'Name used for "keyword" column. Default: "keyword"'
+  table-header-weight:
+    description: 'Name used for "weight" column. Default: "weight"'
+  table-header-count:
+    description: 'Name used for "count" column. Default: "count"'
+  table-header-total-impact:
+    description: 'Name used for "total impact" column. Default: "total impact"'
   keyword-1-value:
     description: 'Keyword to use in calculating weight for Neelix experiences'
   keyword-1-weight:
@@ -144,8 +166,10 @@ runs:
       run: |
         REPO=${{ github.repository }}
         echo "repo: $REPO"
+        echo "repo=$REPO" >> "$GITHUB_ENV"
         PR_NUMBER=${{ github.event.number }}
         echo "pr number: $PR_NUMBER"
+        echo "pr_number=$PR_NUMBER" >> "$GITHUB_ENV"
         # TODO: make random EOF
         echo "review_data<<EOF" >> "$GITHUB_ENV"
         curl -sL \
@@ -158,7 +182,7 @@ runs:
     - uses: actions/checkout@v3
       with:
         repository: neelix-io/action-handling
-        ref: generate-commentary
+        ref: additional-settings
         token: ${{ inputs.temp-pat }}  # TODO: remove before project becomes public
     - name: Process review data
       id: process-reviews
@@ -167,11 +191,19 @@ runs:
         experience-summary: ${{ inputs.experience-summary }}
         keywords: ${{ env.keywords }}
         review-data: ${{ env.review_data }}
+        table-header-keyword: ${{ inputs.table-header-keyword }}
+        table-header-weight: ${{ inputs.table-header-weight }}
+        table-header-count: ${{ inputs.table-header-count }}
+        table-header-total-impact: ${{ inputs.table-header-total-impact }}
     - name: Send request
       id: send-request
-      uses: neelix-io/generic-action@build-weight
+      uses: neelix-io/generic-action@additional-settings
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}
         commentary: ${{ steps.process-reviews.outputs.commentary }}
         weight: ${{ steps.process-reviews.outputs.weight }}
+        activity-id: ${{ inputs.activity-id }}
+        category-ids: ${{ inputs.category-ids }}
+        team-ids: ${{ inputs.team-ids }}
+        external-ref: "https://github.com/${{ env.repo }}/pull/${{ env.pr_number }}"

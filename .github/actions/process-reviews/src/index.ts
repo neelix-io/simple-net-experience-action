@@ -12,6 +12,8 @@ type KeywordResults = {
   };
 }
 
+const BASE_WIDTH = 12;
+
 
 const processKeywords = (keywords: [string, number][], reviews: ReviewData[]) => {
   const results: KeywordResults = {};
@@ -26,24 +28,27 @@ const processKeywords = (keywords: [string, number][], reviews: ReviewData[]) =>
   return results;
 }
 
-const generateCommentary = (results: KeywordResults, summary: string) => {
-  // columns: keyword, weight, count, total impact
-  const cols = ['keyword', 'weight', 'count', 'total impact'];
-
-  let heading = cols.reduce((acc, col) => `${acc}| ${col.padEnd(10)} `, '');
+const generateCommentary = (
+  results: KeywordResults,
+  summary: string,
+  cols: [string, string, string, string],
+) => {
+  let heading = cols.reduce((acc, col) =>
+    `${acc}| ${col.padEnd(BASE_WIDTH)} `,
+  '');
   heading += '|\n';
   cols.forEach((_, idx) => {
-    heading += `|-${'-'.repeat(10)}${idx > 0 ? ':' : '-'}`;
+    heading += `|-${'-'.repeat(BASE_WIDTH)}${idx > 0 ? ':' : '-'}`;
   });
   heading += '|\n';
 
   const table = Object.entries(results)
     .reduce((acc, [keyword, { weight, count }]) => {
       let t = acc;
-      t += `| ${keyword.padEnd(10)} `
-      t += `| ${weight.toString().padEnd(10)} `
-      t += `| ${count.toString().padEnd(10)} `
-      t += `| ${(weight * count).toString().padEnd(10)} |\n`
+      t += `| ${keyword.padEnd(BASE_WIDTH)} `
+      t += `| ${weight.toString().padEnd(BASE_WIDTH)} `
+      t += `| ${count.toString().padEnd(BASE_WIDTH)} `
+      t += `| ${(weight * count).toString().padEnd(BASE_WIDTH)} |\n`
       return t;
     }, heading);
 
@@ -71,7 +76,15 @@ const run = () => {
   core.setOutput('weight', aggWeight);
 
   const experienceSummary = core.getInput('experience-summary');
-  const commentary = generateCommentary(results, experienceSummary);
+
+  const cols: [string, string, string, string] = [
+    core.getInput('table-header-keyword') || 'keyword',
+    core.getInput('table-header-weight') || 'weight',
+    core.getInput('table-header-count') || 'count',
+    core.getInput('table-header-total-impact') || 'total impact',
+  ];
+
+  const commentary = generateCommentary(results, experienceSummary, cols);
   console.log('generated commentary:', commentary);
 
   core.setOutput('commentary', commentary);
