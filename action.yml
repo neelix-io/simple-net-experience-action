@@ -67,7 +67,7 @@ runs:
     - uses: actions/checkout@v3
       with:
         repository: neelix-io/action-handling
-        ref: additional-settings
+        ref: simplified-keywords
         token: ${{ inputs.temp-pat }}  # TODO: remove before project becomes public
     - name: Process review data
       id: process-reviews
