@@ -83,8 +83,6 @@ runs:
     - name: Send request
       id: send-request
       uses: neelix-io/create-experience-action@dev
-      env:
-        PR_NUMBER: ${{ github.event.number }}
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}
@@ -93,4 +91,4 @@ runs:
         activity-id: ${{ inputs.activity-id }}
         category-ids: ${{ inputs.category-ids }}
         team-ids: ${{ inputs.team-ids }}
-        external-ref: "https://github.com/$GITHUB_REPOSITORY/pull/$PR_NUMBER"
+        external-ref: "https://github.com/${{ github.repository }}/pull/${{ github.event.number }}"
