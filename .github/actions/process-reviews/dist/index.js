@@ -2731,23 +2731,49 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
-const BASE_WIDTH = 12;
-const processKeywords = (keywords, reviews) => {
-    var _a, _b;
-    const results = {};
-    for (const [keyword, weight] of Object.entries(keywords)) {
-        let count = 0;
-        for (const review of reviews) {
-            const re = new RegExp(keyword, 'g');
-            count += (((_b = (_a = review.body) === null || _a === void 0 ? void 0 : _a.match(re)) === null || _b === void 0 ? void 0 : _b.length) || 0);
-        }
-        results[keyword] = { count, weight };
-    }
-    return results;
+const process_keywords_1 = __importDefault(__nccwpck_require__(358));
+const generate_commentary_1 = __importDefault(__nccwpck_require__(31));
+const run = () => {
+    const reviewData = core.getInput('review-data');
+    core.debug(`raw review data: ${reviewData}`);
+    const parsedReviews = JSON.parse(reviewData);
+    core.debug(`parsed review data: ${parsedReviews}`);
+    const rawKeywordsInput = core.getInput('keywords');
+    core.debug(`raw keywords input: ${rawKeywordsInput}`);
+    const keywords = JSON.parse(rawKeywordsInput);
+    core.debug(`parsed keywords input: ${keywords}`);
+    const results = (0, process_keywords_1.default)(keywords, parsedReviews);
+    const aggWeight = Object.values(results)
+        .reduce((acc, { count, weight }) => acc + (count * weight), 0);
+    core.setOutput('weight', aggWeight);
+    const experienceSummary = core.getInput('experience-summary');
+    const cols = [
+        core.getInput('table-header-keyword') || 'keyword',
+        core.getInput('table-header-weight') || 'weight',
+        core.getInput('table-header-count') || 'count',
+        core.getInput('table-header-total-impact') || 'total impact',
+    ];
+    const commentary = (0, generate_commentary_1.default)(results, experienceSummary, cols);
+    core.setOutput('commentary', commentary);
 };
-const generateCommentary = (results, summary, cols) => {
+run();
+
+
+/***/ }),
+
+/***/ 31:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const BASE_WIDTH = 12;
+exports["default"] = (results, summary, cols) => {
     let heading = cols.reduce((acc, col) => `${acc}| ${col.padEnd(BASE_WIDTH)} `, '');
     heading += '|\n';
     cols.forEach((_, idx) => {
@@ -2765,30 +2791,29 @@ const generateCommentary = (results, summary, cols) => {
     }, heading);
     return `${summary}\n\n---\n\n${table}`;
 };
-const run = () => {
-    const reviewData = core.getInput('review-data');
-    core.debug(`raw review data: ${reviewData}`);
-    const parsedReviews = JSON.parse(reviewData);
-    core.debug(`parsed review data: ${parsedReviews}`);
-    const rawKeywordsInput = core.getInput('keywords');
-    core.debug(`raw keywords input: ${rawKeywordsInput}`);
-    const keywords = JSON.parse(rawKeywordsInput);
-    core.debug(`parsed keywords input: ${keywords}`);
-    const results = processKeywords(keywords, parsedReviews);
-    const aggWeight = Object.values(results)
-        .reduce((acc, { count, weight }) => acc + (count * weight), 0);
-    core.setOutput('weight', aggWeight);
-    const experienceSummary = core.getInput('experience-summary');
-    const cols = [
-        core.getInput('table-header-keyword') || 'keyword',
-        core.getInput('table-header-weight') || 'weight',
-        core.getInput('table-header-count') || 'count',
-        core.getInput('table-header-total-impact') || 'total impact',
-    ];
-    const commentary = generateCommentary(results, experienceSummary, cols);
-    core.setOutput('commentary', commentary);
+
+
+/***/ }),
+
+/***/ 358:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports["default"] = (keywords, reviews) => {
+    var _a, _b;
+    const results = {};
+    for (const [keyword, weight] of Object.entries(keywords)) {
+        let count = 0;
+        for (const review of reviews) {
+            const re = new RegExp(keyword, 'g');
+            count += (((_b = (_a = review.body) === null || _a === void 0 ? void 0 : _a.match(re)) === null || _b === void 0 ? void 0 : _b.length) || 0);
+        }
+        results[keyword] = { count, weight };
+    }
+    return results;
 };
-run();
 
 
 /***/ }),

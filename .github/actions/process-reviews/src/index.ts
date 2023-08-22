@@ -1,62 +1,8 @@
 import * as core from '@actions/core';
 
+import processKeywords from './util/process-keywords'
+import generateCommentary from './util/generate-commentary'
 
-type ReviewData = {
-  body: string;
-}
-
-type KeywordResults = {
-  [keyword: string]: {
-    count: number;
-    weight: number;
-  };
-}
-
-const BASE_WIDTH = 12;
-
-
-const processKeywords = (
-  keywords: { [keyword: string]: number },
-  reviews: ReviewData[],
-) => {
-  const results: KeywordResults = {};
-  for (const [keyword, weight] of Object.entries(keywords)) {
-    let count = 0;
-    for (const review of reviews) {
-      const re = new RegExp(keyword, 'g');
-      count += ((<string>review.body)?.match(re)?.length || 0);
-    }
-    results[keyword] = { count, weight }
-  }
-  return results;
-}
-
-const generateCommentary = (
-  results: KeywordResults,
-  summary: string,
-  cols: [string, string, string, string],
-) => {
-  let heading = cols.reduce((acc, col) =>
-    `${acc}| ${col.padEnd(BASE_WIDTH)} `,
-  '');
-  heading += '|\n';
-  cols.forEach((_, idx) => {
-    heading += `|-${'-'.repeat(BASE_WIDTH)}${idx > 0 ? ':' : '-'}`;
-  });
-  heading += '|\n';
-
-  const table = Object.entries(results)
-    .reduce((acc, [keyword, { weight, count }]) => {
-      let t = acc;
-      t += `| ${keyword.padEnd(BASE_WIDTH)} `
-      t += `| ${weight.toString().padEnd(BASE_WIDTH)} `
-      t += `| ${count.toString().padEnd(BASE_WIDTH)} `
-      t += `| ${(weight * count).toString().padEnd(BASE_WIDTH)} |\n`
-      return t;
-    }, heading);
-
-  return `${summary}\n\n---\n\n${table}`;
-}
 
 const run = () => {
   const reviewData = core.getInput('review-data');

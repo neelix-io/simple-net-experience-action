@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Action for calculating weight and generating commentary for Neelix experiences from merged PR reviews.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --coverage",
     "build": "ncc build src/index.ts -o dist --license licenses.txt"
   },
   "repository": {
@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/neelix-io/action-handling#readme",
   "devDependencies": {
+    "@jest/globals": "^29.6.3",
     "@vercel/ncc": "^0.36.1",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.1.6"
   },
   "dependencies": {
