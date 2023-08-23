@@ -34,3 +34,4 @@ jobs:
           activity-id: ${{ secrets.TEST_ACTIVITY_ID }}
           category-ids: ${{ secrets.TEST_CATEGORY_IDS }}
           team-ids: ${{ secrets.TEST_TEAM_IDS }}
+          skip-setup: 'true'

@@ -44,6 +44,10 @@ inputs:
       'GitHub token used to authenticate against GitHub API to retrieve PR '
       'review data.'
     default: ${{ github.token }}
+  skip-setup:
+    description: 'Skips checkout. Used for testing only.'
+    required: false
+    default: 'false'
 runs:
   using: composite
   steps:
@@ -60,7 +64,9 @@ runs:
           "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews" >> "$GITHUB_ENV"
         echo "EOF" >> "$GITHUB_ENV"
       shell: bash
-    - uses: actions/checkout@v3
+    - name: Setup
+      if: ${{ input.skip-setup != 'true' }}
+      uses: actions/checkout@v3
       with:
         repository: neelix-io/action-handling
         ref: pre-release
