@@ -68,8 +68,8 @@ runs:
       if: ${{ inputs.skip-setup != 'true' }}
       uses: actions/checkout@v3
       with:
-        repository: neelix-io/action-handling
-        ref: pre-release
+        repository: neelix-io/simple-net-experience-action
+        ref: v1.0.0
     - name: Process review data
       id: process-reviews
       uses: ./.github/actions/process-reviews
