@@ -1,0 +1,15 @@
+name: Test process-reviews action code
+
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  test-process-reviews:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        uses: actions/checkout@v3
+      - name: Process-reviews action unit tests
+        run: |
+          cd .github/actions/process-reviews
+          npm ci
+          npm test

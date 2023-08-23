@@ -1,6 +1,9 @@
 name: Test create Simple Net Experience
 
-on: [pull_request, workflow_dispatch]
+on:
+  pull_request:
+    types:
+      - closed
 
 env:
   SUMMARY: 'Testing "Simple Net Experience" GitHub action.'
