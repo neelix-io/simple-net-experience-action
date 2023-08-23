@@ -83,7 +83,7 @@ runs:
         table-header-total-impact: ${{ inputs.table-header-total-impact }}
     - name: Send request
       id: send-request
-      uses: neelix-io/create-experience-action@dev
+      uses: neelix-io/create-experience-action@v1.0.0
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}
