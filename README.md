@@ -31,7 +31,7 @@ jobs:
   create-simple-net-experience:
     runs-on: ubuntu-latest
     steps:
-      - uses: neelix-io/create-simple-net-experience-action@v1
+      - uses: neelix-io/simple-net-experience-action@v1
         with:
           api-token: ${{ secrets.TEST_API_TOKEN }}
           consortium-id: ${{ vars.CONSORTIUM_ID }}
