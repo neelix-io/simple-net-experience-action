@@ -22,7 +22,6 @@ jobs:
       - name: Simple Net Experience action end-to-end test
         uses: ./
         with:
-          temp-pat: ${{ github.token }}
           api-token: ${{ secrets.TEST_API_TOKEN }}
           consortium-id: ${{ secrets.TEST_CONSORTIUM_ID }}
           experience-summary: ${{ env.EXP_SUMMARY }}

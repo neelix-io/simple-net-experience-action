@@ -3,10 +3,6 @@ description: >
   'Action for generating Neelix experiences from merged PR reviews with net '
   'weight of keyword occurrences.'
 inputs:
-  # TODO: remove before project becomes public
-  temp-pat:
-    description: 'PAT needed temporarily while project is private'
-    required: true
   api-token:
     description: 'Neelix API token (should be stored as secret)'
     required: true
@@ -68,7 +64,6 @@ runs:
       with:
         repository: neelix-io/action-handling
         ref: pre-release
-        token: ${{ inputs.temp-pat }}  # TODO: remove before project becomes public
     - name: Process review data
       id: process-reviews
       uses: ./.github/actions/process-reviews
