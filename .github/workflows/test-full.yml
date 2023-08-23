@@ -1,0 +1,37 @@
+name: Test create Simple Net Experience
+
+on:
+  pull_request:
+    types:
+      - closed
+
+env:
+  SUMMARY: 'Testing "Simple Net Experience" GitHub action.'
+
+jobs:
+  test-simple-net-experience:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        uses: actions/checkout@v3
+      - name: Process-reviews action unit tests
+        run: |
+          cd .github/actions/process-reviews
+          npm ci
+          npm test
+      - name: Simple Net Experience action e2e test
+        uses: ./
+        with:
+          temp-pat: ${{ secrets.MY_PAT }}
+          api-token: ${{ secrets.TEST_API_TOKEN }}
+          consortium-id: ${{ secrets.TEST_CONSORTIUM_ID }}
+          experience-summary: ${{ env.EXP_SUMMARY }}
+          keywords: |
+            {
+              "very bad": -7,
+              "good": 4,
+              "aaa": 10
+            }
+          activity-id: ${{ secrets.TEST_ACTIVITY_ID }}
+          category-ids: ${{ secrets.TEST_CATEGORY_IDS }}
+          team-ids: ${{ secrets.TEST_TEAM_IDS }}
