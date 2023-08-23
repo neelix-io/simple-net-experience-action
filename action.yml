@@ -65,7 +65,7 @@ runs:
         echo "EOF" >> "$GITHUB_ENV"
       shell: bash
     - name: Setup
-      if: ${{ input.skip-setup != 'true' }}
+      if: ${{ inputs.skip-setup != 'true' }}
       uses: actions/checkout@v3
       with:
         repository: neelix-io/action-handling
