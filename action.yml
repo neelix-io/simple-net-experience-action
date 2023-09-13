@@ -83,7 +83,7 @@ runs:
         table-header-total-impact: ${{ inputs.table-header-total-impact }}
     - name: Send request
       id: send-request
-      if: ${{ steps.process-reviews.outputs.no-match != "true" }}
+      if: ${{ steps.process-reviews.outputs.no-match != 'true' }}
       uses: neelix-io/create-experience-action@dev
       with:
         api-token: ${{ inputs.api-token }}
