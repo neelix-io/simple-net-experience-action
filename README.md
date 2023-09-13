@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: neelix-io/simple-net-experience-action@v1
         with:
-          api-token: ${{ secrets.TEST_API_TOKEN }}
+          api-token: ${{ secrets.API_TOKEN }}
           consortium-id: 017af22f-bffb-45a6-8272-01a6066195f3
           experience-summary: "My experience summary"
           activity-id: 275
