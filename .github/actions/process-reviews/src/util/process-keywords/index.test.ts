@@ -11,10 +11,10 @@ const keywords = {
 }
 
 const reviews = [
-  { body: 'good' },
+  { body: 'Good' },
   { body: 'very good' },
   { body: 'a really bad approach' },
-  { body: 'fantastic' },
+  { body: 'dumpster with a huge fire' },
   { body: 'a bit of a dumpster fire, I think' },
 ];
 

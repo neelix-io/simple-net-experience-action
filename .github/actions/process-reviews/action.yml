@@ -21,6 +21,8 @@ outputs:
     description: 'Commentary for Neelix experience'
   weight:
     description: 'Weight of Neelix experience'
+  no-match:
+    description: '"true" if no keywords found'
 runs:
   using: 'node16'
   main: 'dist/index.js'

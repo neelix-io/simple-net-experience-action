@@ -69,7 +69,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: neelix-io/simple-net-experience-action
-        ref: v1.0.0
+        ref: prerelease
     - name: Process review data
       id: process-reviews
       uses: ./.github/actions/process-reviews
@@ -83,7 +83,8 @@ runs:
         table-header-total-impact: ${{ inputs.table-header-total-impact }}
     - name: Send request
       id: send-request
-      uses: neelix-io/create-experience-action@v1.0.0
+      if: ${{ steps.process-reviews.outputs.no-match != "true" }}
+      uses: neelix-io/create-experience-action@dev
       with:
         api-token: ${{ inputs.api-token }}
         consortium-id: ${{ inputs.consortium-id }}

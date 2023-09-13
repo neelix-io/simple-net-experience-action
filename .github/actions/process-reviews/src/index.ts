@@ -19,6 +19,13 @@ const run = () => {
 
   const results = processKeywords(keywords, parsedReviews);
 
+  const totalCount = Object.values(results)
+    .reduce((acc, { count }) => acc + count, 0);
+  if (totalCount < 1) {
+    core.setOutput('no-match', true);
+    return;
+  }
+
   const aggWeight = Object.values(results)
     .reduce((acc, { count, weight }) => acc + (count * weight), 0);
 
