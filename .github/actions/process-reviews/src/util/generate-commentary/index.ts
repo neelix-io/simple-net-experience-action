@@ -14,7 +14,8 @@ export default (
   '');
   heading += '|\n';
   cols.forEach((_, idx) => {
-    heading += `|-${'-'.repeat(BASE_WIDTH)}${idx > 0 ? ':' : '-'}`;
+    const [left, right] = idx > 0 ? ['-', ':'] : [':', '-'];
+    heading += `|${left}${'-'.repeat(BASE_WIDTH)}${right}`;
   });
   heading += '|\n';
 

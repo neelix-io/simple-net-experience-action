@@ -14,7 +14,7 @@ export default (
   for (const [keyword, weight] of Object.entries(keywords)) {
     let count = 0;
     for (const review of reviews) {
-      const re = new RegExp(keyword, 'g');
+      const re = new RegExp(keyword, 'gi');
       count += ((<string>review.body)?.match(re)?.length || 0);
     }
     results[keyword] = { count, weight }

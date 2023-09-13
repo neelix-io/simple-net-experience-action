@@ -2748,6 +2748,12 @@ const run = () => {
     const keywords = JSON.parse(rawKeywordsInput);
     core.debug(`parsed keywords input: ${keywords}`);
     const results = (0, process_keywords_1.default)(keywords, parsedReviews);
+    const totalCount = Object.values(results)
+        .reduce((acc, { count }) => acc + count, 0);
+    if (totalCount < 1) {
+        core.setOutput('no-match', true);
+        return;
+    }
     const aggWeight = Object.values(results)
         .reduce((acc, { count, weight }) => acc + (count * weight), 0);
     core.setOutput('weight', aggWeight);
@@ -2777,7 +2783,8 @@ exports["default"] = (results, summary, cols) => {
     let heading = cols.reduce((acc, col) => `${acc}| ${col.padEnd(BASE_WIDTH)} `, '');
     heading += '|\n';
     cols.forEach((_, idx) => {
-        heading += `|-${'-'.repeat(BASE_WIDTH)}${idx > 0 ? ':' : '-'}`;
+        const [left, right] = idx > 0 ? ['-', ':'] : [':', '-'];
+        heading += `|${left}${'-'.repeat(BASE_WIDTH)}${right}`;
     });
     heading += '|\n';
     const table = Object.entries(results)
@@ -2807,7 +2814,7 @@ exports["default"] = (keywords, reviews) => {
     for (const [keyword, weight] of Object.entries(keywords)) {
         let count = 0;
         for (const review of reviews) {
-            const re = new RegExp(keyword, 'g');
+            const re = new RegExp(keyword, 'gi');
             count += (((_b = (_a = review.body) === null || _a === void 0 ? void 0 : _a.match(re)) === null || _b === void 0 ? void 0 : _b.length) || 0);
         }
         results[keyword] = { count, weight };
