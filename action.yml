@@ -51,32 +51,25 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Get PR review data
-      id: get-reviews
-      env:
-        PR_NUMBER: ${{ github.event.number }}
-      run: |
-        echo "review_data<<EOF" >> "$GITHUB_ENV"
-        curl -sL \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ inputs.github-token }}" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews" >> "$GITHUB_ENV"
-        echo "EOF" >> "$GITHUB_ENV"
-      shell: bash
     - name: Setup
       if: ${{ inputs.skip-setup != 'true' }}
       uses: actions/checkout@v3
       with:
         repository: neelix-io/simple-net-experience-action
         ref: prerelease
+    - name: Get PR review data
+      id: get-review-data
+      uses: ./.github/actions/get-review-data
+      with:
+        pr-number: ${{ github.event.number }}
+        github-token: ${{ inputs.github-token }}
     - name: Process review data
       id: process-reviews
       uses: ./.github/actions/process-reviews
       with:
         experience-summary: ${{ inputs.experience-summary }}
         keywords: ${{ inputs.keywords }}
-        review-data: ${{ env.review_data }}
+        review-data: ${{ steps.get-review-data.outputs.data }}
         table-header-keyword: ${{ inputs.table-header-keyword }}
         table-header-weight: ${{ inputs.table-header-weight }}
         table-header-count: ${{ inputs.table-header-count }}
