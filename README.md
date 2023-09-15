@@ -45,6 +45,8 @@ on:
 jobs:
   create-simple-net-experience:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
     steps:
       - uses: neelix-io/simple-net-experience-action@v1
         with:
