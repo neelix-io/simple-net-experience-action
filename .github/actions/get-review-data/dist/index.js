@@ -9682,10 +9682,10 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             octokit.paginate(octokit.rest.pulls.listReviews, params),
             octokit.paginate(octokit.rest.pulls.listReviewComments, params),
         ]);
-        core.info(`reviews:\n${JSON.stringify(reviews, null, 2)}`);
-        core.info(`\ncomments:\n${JSON.stringify(comments, null, 2)}`);
+        core.debug(`reviews:\n${JSON.stringify(reviews, null, 2)}`);
+        core.debug(`\ncomments:\n${JSON.stringify(comments, null, 2)}`);
         const data = reviews.map(({ body }) => ({ body }));
-        comments.forEach(({ body }) => data.push({ body }));
+        data.push(...comments.map(({ body }) => ({ body })));
         core.setOutput('data', data);
     }
     catch (err) {
