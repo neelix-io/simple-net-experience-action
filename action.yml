@@ -60,7 +60,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: neelix-io/simple-net-experience-action
-        ref: prerelease
+        ref: main
     - name: Get PR review data
       id: get-review-data
       uses: ./.github/actions/get-review-data
