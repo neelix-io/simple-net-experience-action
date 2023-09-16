@@ -8,8 +8,7 @@ for an action with more direct control over the Experience created, check out
 
 This GitHub Action will serve as an invaluable tool for your development team,
 enabling you to seamlessly automate the assessment of joint coding practices.
-This offering is a [Neelix.IO](https://www.neelix.io)
-[platform](https://platform.neelix.io/github-actions) offering to support your
+This offering is a [Neelix.IO platform](https://platform.neelix.io/github-actions) offering to support your
 workflow with the [Team Journal](https://team.neelix.io/team-journal). Empower
 a team culture that cares about the development quality of the code, identifes
 areas for improvement, and tracks progress over time. This automated approach
